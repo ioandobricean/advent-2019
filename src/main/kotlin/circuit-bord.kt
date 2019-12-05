@@ -2,6 +2,7 @@ import kotlin.math.abs
 
 class CircuitBoard {
     private val centralPoint = Point(0, 0)
+    var wires: MutableList<Wire> = mutableListOf()
     var grid: MutableMap<Point, BoardCell> = mutableMapOf()
 
     private fun computeGridForWire(wire: Wire): MutableMap<Point, BoardCell> {
@@ -22,6 +23,7 @@ class CircuitBoard {
     }
 
     fun applyWire(wire: Wire) {
+        wires.add(wire)
         val localGrid = computeGridForWire(wire)
         if (grid.isEmpty()) {
             grid.putAll(localGrid)
@@ -60,17 +62,37 @@ class CircuitBoard {
         }
     }
 
-    fun manhattanDistance(wire1: Wire, wire2: Wire): Int? {
-        applyWire(wire1)
-        applyWire(wire2)
-
+    fun manhattanDistance(): Int? {
         return grid.filter { (point, cell) -> cell == BoardCell.INTERSECT }
                 .map { (point, cell) -> abs(point.x) + abs(point.y) }
                 .min()
     }
+
+    fun closestIntersection(): Int? {
+        return grid.filter { (point, cell) -> cell == BoardCell.INTERSECT }
+                .map { computeDistanceInSteps(it.key) }
+                .min()
+    }
+
+    private fun computeDistanceInSteps(point: Point): Int {
+        return wires.map { it.distanceToPoint(point) }.sum()
+    }
 }
 
-data class Wire(val path: Path)
+data class Wire(val path: Path) {
+    fun distanceToPoint(endPoint: Point): Int {
+        var steps = 0
+        var cursor = Point(0, 0)
+        for (segment in path.segments) {
+            for (step in 1..segment.length) {
+                cursor = cursor.next(segment.direction)
+                steps += 1
+                if (cursor == endPoint) return steps
+            }
+        }
+        return steps
+    }
+}
 
 data class Path(val rawPath: String) {
     val segments = rawPath.split(",").map {
