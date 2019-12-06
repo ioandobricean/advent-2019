@@ -12,9 +12,10 @@ object BruteForcePasswordFinderSpec : Spek({
         }
         it("should have 2 adjacent digits") {
             val passwordFinder = BruteForcePasswordFinder()
-            passwordFinder.hasAdjacentDigits("122345") shouldBe true
-            passwordFinder.hasAdjacentDigits("111111") shouldBe true
-            passwordFinder.hasAdjacentDigits("123456") shouldBe false
+            passwordFinder.hasAdjacentOnly2Digits("122345") shouldBe true
+            passwordFinder.hasAdjacentOnly2Digits("112233") shouldBe true
+            passwordFinder.hasAdjacentOnly2Digits("111111") shouldBe false
+            passwordFinder.hasAdjacentOnly2Digits("123456") shouldBe false
         }
         it("should only increase digits") {
             val passwordFinder = BruteForcePasswordFinder()
@@ -23,9 +24,9 @@ object BruteForcePasswordFinderSpec : Spek({
         }
         it("match all password conditions") {
             val passwordFinder = BruteForcePasswordFinder()
-            passwordFinder.matchPass(111111) shouldBe true
-            passwordFinder.matchPass(223450) shouldBe false
-            passwordFinder.matchPass(123789) shouldBe false
+            passwordFinder.matchPass(112233) shouldBe true
+            passwordFinder.matchPass(111122) shouldBe true
+            passwordFinder.matchPass(123444) shouldBe false
         }
     }
 })
