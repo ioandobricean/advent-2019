@@ -1,5 +1,3 @@
-import sun.reflect.generics.reflectiveObjects.NotImplementedException
-
 data class Intcode(val memory: Memory) {
     fun execute() {
         var pointer = 0
@@ -18,7 +16,7 @@ fun buildInstruction(pointer: Int, memory: Memory): Instruction {
         1 -> AddInstruction(pointer, memory)
         2 -> MultiplyInstruction(pointer, memory)
         99 -> StopInstruction(pointer)
-        else -> throw NotImplementedException()
+        else -> throw Exception("Not supported operation code")
     }
 }
 
