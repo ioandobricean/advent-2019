@@ -1,8 +1,8 @@
 import java.io.File
 
 fun main() {
-    val filePath = Module::class.java.getResource("day1.txt").file
+    val filePath = RocketModule::class.java.getResource("day1.txt").file
     val input = File(filePath).readLines().map { Integer.valueOf(it) }
-    val requiredFuel = input.map { Module(it).requiredFuel() }.sum()
+    val requiredFuel = input.map { RocketModule(it).requiredFuel() }.sum()
     print("Required Fuel is $requiredFuel")
 }

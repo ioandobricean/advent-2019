@@ -1,4 +1,4 @@
-data class Module(val mass: Int) {
+data class RocketModule(val mass: Int) {
     fun requiredFuel(): Int {
         val fuel = computeRequiredFuel(mass)
         return fuel + requiredFuelForFuel(fuel)
