@@ -1,3 +1,9 @@
+package app
+
+import CircuitBoard
+import Path
+import Wire
+
 fun main() {
     val wire1 = Wire(Path("R8,U5,L5,D3"))
     val wire2 = Wire(Path("U7,R6,D4,L4"))
