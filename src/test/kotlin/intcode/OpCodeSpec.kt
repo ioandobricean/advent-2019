@@ -13,8 +13,8 @@ object OpCodeSpec : Spek({
                 opCode.getInstruction() shouldEqual addInstruction
             }
             it("with only value parameters") {
-                val opCode = OpCode(0, 11101)
-                val addInstruction = AddInstruction(0, ImmediateParameter(1), ImmediateParameter(2), ImmediateParameter(3))
+                val opCode = OpCode(0, 1101)
+                val addInstruction = AddInstruction(0, ImmediateParameter(1), ImmediateParameter(2), PositionParameter(3))
                 opCode.getInstruction() shouldEqual addInstruction
             }
             it("with mixed parameters") {

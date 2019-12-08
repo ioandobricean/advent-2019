@@ -1,22 +1,20 @@
 package intcode
 
-class StopInstruction(val pointer: Int) : Instruction() {
+data class StopInstruction(val pointer: Int) : Instruction() {
     override fun hasNextOperation(memory: Memory): Boolean = false
     override fun nextInstructionPointer() = pointer + 1
 
     override fun execute(memory: Memory) {
     }
-
 }
 
 abstract class Instruction {
-    abstract fun hasNextOperation(memory: Memory): Boolean
+    open fun hasNextOperation(memory: Memory): Boolean = nextInstructionPointer() < memory.size()
     abstract fun nextInstructionPointer(): Int
     abstract fun execute(memory: Memory)
 }
 
-data class AddInstruction(val pointer: Int, val param1: Parameter, val param2: Parameter, val output: Parameter) : Instruction() {
-    override fun hasNextOperation(memory: Memory): Boolean = nextInstructionPointer() < memory.size()
+data class AddInstruction(val pointer: Int, val param1: Parameter, val param2: Parameter, val output: PositionParameter) : Instruction() {
     override fun nextInstructionPointer(): Int = pointer + 4
 
     override fun execute(memory: Memory) {
@@ -30,8 +28,7 @@ data class AddInstruction(val pointer: Int, val param1: Parameter, val param2: P
     }
 }
 
-data class MultiplyInstruction(val pointer: Int, val param1: Parameter, val param2: Parameter, val output: Parameter) : Instruction() {
-    override fun hasNextOperation(memory: Memory): Boolean = nextInstructionPointer() < memory.size()
+data class MultiplyInstruction(val pointer: Int, val param1: Parameter, val param2: Parameter, val output: PositionParameter) : Instruction() {
     override fun nextInstructionPointer(): Int = pointer + 4
     override fun execute(memory: Memory) {
         if (!hasNextOperation(memory)) {
@@ -41,5 +38,23 @@ data class MultiplyInstruction(val pointer: Int, val param1: Parameter, val para
         val value1 = param1.getValue(memory)
         val value2 = param2.getValue(memory)
         output.setValue(value1 * value2, memory)
+    }
+}
+
+data class InputInstruction(val pointer: Int) : Instruction() {
+    override fun nextInstructionPointer(): Int = pointer + 2
+    override fun execute(memory: Memory) {
+        val value = Integer.valueOf(readLine()!!)
+        val outputAddress = memory.getAddressValue(pointer + 1)
+        memory.setAddressValue(outputAddress, value)
+    }
+}
+
+data class OutputInstruction(val pointer: Int) : Instruction() {
+    override fun nextInstructionPointer(): Int = pointer + 2
+    override fun execute(memory: Memory) {
+        val outputAddress = memory.getAddressValue(pointer + 1)
+        val outputValue = memory.getAddressValue(outputAddress)
+        println("$outputValue")
     }
 }

@@ -5,7 +5,7 @@ import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 object IntcodeSpec : Spek({
-    describe("An intcode.Intcode program") {
+    describe("An Intcode program") {
         it("adds 2 numbers") {
             val memory = Memory("1,5,6,3,99,10,20")
             val intcode = Intcode(memory)
@@ -27,7 +27,7 @@ object IntcodeSpec : Spek({
         }
     }
 
-    describe("intcode.Intcode test for") {
+    describe("Intcode test for") {
         it("adds 2 numbers") {
             val memory = Memory("1,0,0,0,99")
             val intcode = Intcode(memory)
@@ -53,4 +53,13 @@ object IntcodeSpec : Spek({
             memory shouldEqual Memory("30,1,1,4,2,5,6,0,99")
         }
     }
+    describe("Intcode with mixed parameters") {
+        it("multiply 2 numbers") {
+            val memory = Memory("1002,4,3,4,33")
+            val intcode = Intcode(memory)
+            intcode.execute()
+            memory shouldEqual Memory("1002,4,3,4,99")
+        }
+    }
+
 })
