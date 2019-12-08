@@ -2,41 +2,41 @@ package intcode
 
 data class OpCode(val pointer: Int, val code: Int) {
     fun getInstruction(): Instruction {
-        val stringCode = code.toString()
+        val stringCode = normalizeCode()
         val params = extractParams(stringCode, pointer)
         return when (val instructionCode = extractInstructionCode(stringCode)) {
-            "01", "1" -> AddInstruction(pointer, params[0], params[1], params[2] as PositionParameter)
-            "02", "2" -> MultiplyInstruction(pointer, params[0], params[1], params[2] as PositionParameter)
-            "03", "3" -> InputInstruction(pointer)
-            "04", "4" -> OutputInstruction(pointer)
+            "01" -> AddInstruction(pointer, params[0], params[1], params[2] as PositionParameter)
+            "02" -> MultiplyInstruction(pointer, params[0], params[1], params[2] as PositionParameter)
+            "03" -> InputInstruction(pointer)
+            "04" -> OutputInstruction(pointer)
             "99" -> StopInstruction(pointer)
             else -> throw Exception("Not supported operation code $instructionCode from $this")
         }
     }
 
+    private fun normalizeCode(): String {
+        var stringCode = code.toString()
+        val initialLength = stringCode.length
+        // add missing 0 in front of the number
+        for (i in 0 until (5 - initialLength)) {
+            stringCode = "0$stringCode"
+        }
+        println(stringCode)
+        return stringCode
+    }
+
     private fun extractParams(stringCode: String, pointer: Int): List<Parameter> {
         val numberOfParams = 3
-        val pointerParam1 = pointer + 1
-        val pointerParam2 = pointer + 2
-        val pointerOutput = pointer + numberOfParams
-        val length = stringCode.length
-        if (length <= 2) {
-            return listOf(PositionParameter(pointerParam1), PositionParameter(pointerParam2), PositionParameter(pointerOutput))
-        } else {
-            var paramsString = stringCode.substring(0 until length - 2)
-            val initialLength = paramsString.length
-            // add missing 0 in front of string
-            for (i in 0 until (numberOfParams - initialLength)) {
-                paramsString = "0$paramsString"
+        val params = mutableListOf<Parameter>()
+        var paramsString = stringCode.substring(0 until numberOfParams)
+        for ((index, code) in paramsString.withIndex().reversed()) {
+            when (code.toString()) {
+                "0" -> params.add(PositionParameter(pointer + (numberOfParams - index)))
+                "1" -> params.add(ImmediateParameter(pointer + (numberOfParams - index)))
+                else -> throw Exception("Invalid parameter code $code")
             }
-            val params = mutableListOf<Parameter>()
-            for ((index, code) in paramsString.withIndex().reversed()) {
-                if (code.toString() == "0") params.add(PositionParameter(pointer + (numberOfParams - index)))
-                else if (code.toString() == "1") params.add(ImmediateParameter(pointer + (numberOfParams - index)))
-                else throw Exception("Invalid parameter code $code")
-            }
-            return params
         }
+        return params
     }
 
     /**
