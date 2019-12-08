@@ -4,10 +4,12 @@ data class Intcode(val memory: Memory) {
     fun execute() {
         var pointer = 0
         do {
-            val operation = buildInstruction(pointer, memory)
-            operation.execute()
-            pointer = operation.nextInstructionPointer()
-        } while (operation.hasNextOperation())
+            val code = memory.getAddressValue(pointer)
+            val opCode = OpCode(pointer, code)
+            val instruction = opCode.getInstruction()
+            instruction.execute(memory)
+            pointer = instruction.nextInstructionPointer()
+        } while (instruction.hasNextOperation(memory))
     }
 
 }

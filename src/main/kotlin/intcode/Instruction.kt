@@ -1,61 +1,45 @@
 package intcode
 
-fun buildInstruction(pointer: Int, memory: Memory): Instruction {
-    val opCode = memory.getAddressValue(pointer)
-    return when (opCode) {
-        1 -> AddInstruction(pointer, memory)
-        2 -> MultiplyInstruction(pointer, memory)
-        99 -> StopInstruction(pointer)
-        else -> throw Exception("Not supported operation code")
-    }
-}
-
 class StopInstruction(val pointer: Int) : Instruction() {
-    override fun hasNextOperation(): Boolean = false
+    override fun hasNextOperation(memory: Memory): Boolean = false
     override fun nextInstructionPointer() = pointer + 1
 
-    override fun execute() {
+    override fun execute(memory: Memory) {
     }
 
 }
 
 abstract class Instruction {
-    abstract fun hasNextOperation(): Boolean
+    abstract fun hasNextOperation(memory: Memory): Boolean
     abstract fun nextInstructionPointer(): Int
-    abstract fun execute()
+    abstract fun execute(memory: Memory)
 }
 
-data class AddInstruction(val pointer: Int, val memory: Memory) : Instruction() {
-    override fun hasNextOperation(): Boolean = nextInstructionPointer() < memory.size()
+data class AddInstruction(val pointer: Int, val param1: Parameter, val param2: Parameter, val output: Parameter) : Instruction() {
+    override fun hasNextOperation(memory: Memory): Boolean = nextInstructionPointer() < memory.size()
     override fun nextInstructionPointer(): Int = pointer + 4
 
-    override fun execute() {
-        if (!hasNextOperation()) {
+    override fun execute(memory: Memory) {
+        if (!hasNextOperation(memory)) {
             println("Buffer Overflow")
             return
         }
-        val posInput1 = memory.getAddressValue(pointer + 1)
-        val posInput2 = memory.getAddressValue(pointer + 2)
-        val posOutput = memory.getAddressValue(pointer + 3)
-        val value1 = memory.getAddressValue(posInput1)
-        val value2 = memory.getAddressValue(posInput2)
-        memory.setAddressValue(posOutput, value1 + value2)
+        val value1 = param1.getValue(memory)
+        val value2 = param2.getValue(memory)
+        output.setValue(value1 + value2, memory)
     }
 }
 
-data class MultiplyInstruction(val pointer: Int, val memory: Memory) : Instruction() {
-    override fun hasNextOperation(): Boolean = nextInstructionPointer() < memory.size()
+data class MultiplyInstruction(val pointer: Int, val param1: Parameter, val param2: Parameter, val output: Parameter) : Instruction() {
+    override fun hasNextOperation(memory: Memory): Boolean = nextInstructionPointer() < memory.size()
     override fun nextInstructionPointer(): Int = pointer + 4
-    override fun execute() {
-        if (!hasNextOperation()) {
+    override fun execute(memory: Memory) {
+        if (!hasNextOperation(memory)) {
             println("Buffer Overflow")
             return
         }
-        val posInput1 = memory.getAddressValue(pointer + 1)
-        val posInput2 = memory.getAddressValue(pointer + 2)
-        val posOutput = memory.getAddressValue(pointer + 3)
-        val value1 = memory.getAddressValue(posInput1)
-        val value2 = memory.getAddressValue(posInput2)
-        memory.setAddressValue(posOutput, value1 * value2)
+        val value1 = param1.getValue(memory)
+        val value2 = param2.getValue(memory)
+        output.setValue(value1 * value2, memory)
     }
 }
