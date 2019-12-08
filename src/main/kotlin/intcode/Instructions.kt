@@ -1,5 +1,7 @@
 package intcode
 
+import io.IOInterface
+
 data class StopInstruction(val pointer: Int) : Instruction() {
     override fun hasNextOperation(memory: Memory): Boolean = false
     override fun nextInstructionPointer() = pointer + 1
@@ -41,20 +43,20 @@ data class MultiplyInstruction(val pointer: Int, val param1: Parameter, val para
     }
 }
 
-data class InputInstruction(val pointer: Int) : Instruction() {
+data class InputInstruction(val pointer: Int, val io: IOInterface) : Instruction() {
     override fun nextInstructionPointer(): Int = pointer + 2
     override fun execute(memory: Memory) {
-        val value = Integer.valueOf(readLine()!!)
+        val value = io.readInt()
         val outputAddress = memory.getAddressValue(pointer + 1)
         memory.setAddressValue(outputAddress, value)
     }
 }
 
-data class OutputInstruction(val pointer: Int) : Instruction() {
+data class OutputInstruction(val pointer: Int, val io: IOInterface) : Instruction() {
     override fun nextInstructionPointer(): Int = pointer + 2
     override fun execute(memory: Memory) {
         val outputAddress = memory.getAddressValue(pointer + 1)
         val outputValue = memory.getAddressValue(outputAddress)
-        println("$outputValue")
+        io.writeInt(outputValue)
     }
 }

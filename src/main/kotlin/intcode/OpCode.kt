@@ -1,14 +1,16 @@
 package intcode
 
-data class OpCode(val pointer: Int, val code: Int) {
+import io.IOInterface
+
+class OpCode(private val pointer: Int, private val code: Int, private val io: IOInterface) {
     fun getInstruction(): Instruction {
         val stringCode = normalizeCode()
         val params = extractParams(stringCode, pointer)
         return when (val instructionCode = extractInstructionCode(stringCode)) {
             "01" -> AddInstruction(pointer, params[0], params[1], params[2] as PositionParameter)
             "02" -> MultiplyInstruction(pointer, params[0], params[1], params[2] as PositionParameter)
-            "03" -> InputInstruction(pointer)
-            "04" -> OutputInstruction(pointer)
+            "03" -> InputInstruction(pointer, io)
+            "04" -> OutputInstruction(pointer, io)
             "99" -> StopInstruction(pointer)
             else -> throw Exception("Not supported operation code $instructionCode from $this")
         }
@@ -21,7 +23,6 @@ data class OpCode(val pointer: Int, val code: Int) {
         for (i in 0 until (5 - initialLength)) {
             stringCode = "0$stringCode"
         }
-        println(stringCode)
         return stringCode
     }
 

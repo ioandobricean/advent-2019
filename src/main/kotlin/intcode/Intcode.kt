@@ -1,16 +1,17 @@
 package intcode
 
-data class Intcode(val memory: Memory) {
+import io.ConsoleInterface
+import io.IOInterface
+
+class Intcode(private val memory: Memory, private val io: IOInterface = ConsoleInterface()) {
     fun execute() {
         var pointer = 0
         do {
             val code = memory.getAddressValue(pointer)
-            val opCode = OpCode(pointer, code)
+            val opCode = OpCode(pointer, code, io)
             val instruction = opCode.getInstruction()
-            println("$instruction")
             instruction.execute(memory)
             pointer = instruction.nextInstructionPointer()
         } while (instruction.hasNextOperation(memory))
     }
-
 }
