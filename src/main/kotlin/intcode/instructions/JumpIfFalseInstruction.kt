@@ -1,0 +1,20 @@
+package intcode.instructions
+
+import intcode.Instruction
+import intcode.Memory
+import intcode.Parameter
+
+data class JumpIfFalseInstruction(val pointer: Int, val param1: Parameter, val param2: Parameter) : Instruction() {
+    private var nextInstruction: Int = pointer + 3
+
+    override fun nextInstructionPointer(): Int {
+        return nextInstruction
+    }
+
+    override fun execute(memory: Memory) {
+        val value = param1.getValue(memory)
+        if (value == 0) {
+            nextInstruction = param2.getValue(memory)
+        }
+    }
+}

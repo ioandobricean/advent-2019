@@ -1,5 +1,9 @@
 package intcode
 
+import intcode.instructions.EqualsInstruction
+import intcode.instructions.JumpIfFalseInstruction
+import intcode.instructions.JumpIfTrueInstruction
+import intcode.instructions.LessThanInstruction
 import io.IOInterface
 
 class OpCode(private val pointer: Int, private val code: Int, private val io: IOInterface) {
@@ -11,6 +15,10 @@ class OpCode(private val pointer: Int, private val code: Int, private val io: IO
             "02" -> MultiplyInstruction(pointer, params[0], params[1], params[2] as PositionParameter)
             "03" -> InputInstruction(pointer, io)
             "04" -> OutputInstruction(pointer, io)
+            "05" -> JumpIfTrueInstruction(pointer, params[0], params[1])
+            "06" -> JumpIfFalseInstruction(pointer, params[0], params[1])
+            "07" -> LessThanInstruction(pointer, params[0], params[1], params[2])
+            "08" -> EqualsInstruction(pointer, params[0], params[1], params[2])
             "99" -> StopInstruction(pointer)
             else -> throw Exception("Not supported operation code $instructionCode from $this")
         }
