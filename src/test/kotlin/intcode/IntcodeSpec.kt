@@ -1,9 +1,13 @@
+package intcode
+
+import intcode.Intcode
+import intcode.Memory
 import org.amshove.kluent.shouldEqual
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 object IntcodeSpec : Spek({
-    describe("An Intcode program") {
+    describe("An intcode.Intcode program") {
         it("adds 2 numbers") {
             val memory = Memory("1,5,6,3,99,10,20")
             val intcode = Intcode(memory)
@@ -25,7 +29,7 @@ object IntcodeSpec : Spek({
         }
     }
 
-    describe("Intcode test for") {
+    describe("intcode.Intcode test for") {
         it("adds 2 numbers") {
             val memory = Memory("1,0,0,0,99")
             val intcode = Intcode(memory)

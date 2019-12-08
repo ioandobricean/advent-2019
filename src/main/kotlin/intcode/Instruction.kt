@@ -1,14 +1,4 @@
-data class Intcode(val memory: Memory) {
-    fun execute() {
-        var pointer = 0
-        do {
-            val operation = buildInstruction(pointer, memory)
-            operation.execute()
-            pointer = operation.nextInstructionPointer()
-        } while (operation.hasNextOperation())
-    }
-
-}
+package intcode
 
 fun buildInstruction(pointer: Int, memory: Memory): Instruction {
     val opCode = memory.getAddressValue(pointer)
@@ -68,34 +58,4 @@ data class MultiplyInstruction(val pointer: Int, val memory: Memory) : Instructi
         val value2 = memory.getAddressValue(posInput2)
         memory.setAddressValue(posOutput, value1 * value2)
     }
-}
-
-class Memory {
-    private var memory: IntArray
-
-    constructor(input: String) {
-        memory = input.split(",").map { Integer.valueOf(it) }.toIntArray()
-    }
-
-    fun getAddressValue(address: Int) = memory[address]
-    fun setAddressValue(address: Int, value: Int) {
-        memory[address] = value
-    }
-
-    fun size() = memory.size
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is Memory) return false
-
-        if (!memory.contentEquals(other.memory)) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        return memory.contentHashCode()
-    }
-
-    override fun toString() = memory.joinToString(separator = ",")
 }
