@@ -1,9 +1,11 @@
 package intcode
 
 class Memory {
+    private var input: String
     private var memory: IntArray
 
     constructor(input: String) {
+        this.input = input
         memory = input.split(",").map { Integer.valueOf(it) }.toIntArray()
     }
 
@@ -28,4 +30,8 @@ class Memory {
     }
 
     override fun toString() = memory.joinToString(separator = ",")
+
+    fun clone(): Memory {
+        return Memory(input)
+    }
 }
