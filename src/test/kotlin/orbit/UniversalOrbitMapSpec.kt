@@ -23,5 +23,24 @@ object UniversalOrbitMapSpec : Spek({
             val map = UniversalOrbitMap(rawMap.lines())
             map.orbitCountChecksum() shouldEqual 42
         }
+        it("compute checksum") {
+            val rawMap = """
+                COM)B
+                B)C
+                C)D
+                D)E
+                E)F
+                B)G
+                G)H
+                D)I
+                E)J
+                J)K
+                K)L
+                K)YOU
+                I)SAN
+            """.trimIndent()
+            val map = UniversalOrbitMap(rawMap.lines())
+            map.minOrbitalTransfer("YOU", "SAN") shouldEqual 4
+        }
     }
 })

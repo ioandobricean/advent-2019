@@ -8,4 +8,5 @@ fun main() {
     val filePath = SpaceObject::class.java.getResource("../app/orbit-map.txt").file
     val orbitMap = UniversalOrbitMap(File(filePath).readLines())
     println(orbitMap.orbitCountChecksum())
+    println(orbitMap.minOrbitalTransfer("YOU", "SAN"))
 }
