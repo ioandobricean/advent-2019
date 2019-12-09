@@ -1,9 +1,9 @@
 package intcode
 
-import intcode.instructions.EqualsInstruction
-import intcode.instructions.JumpIfFalseInstruction
-import intcode.instructions.JumpIfTrueInstruction
-import intcode.instructions.LessThanInstruction
+import intcode.instructions.*
+import intcode.params.ImmediateParameter
+import intcode.params.Parameter
+import intcode.params.PositionParameter
 import io.IOInterface
 
 class OpCode(private val pointer: Int, private val code: Int, private val io: IOInterface) {

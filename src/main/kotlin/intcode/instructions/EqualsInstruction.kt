@@ -1,10 +1,9 @@
 package intcode.instructions
 
-import intcode.Instruction
 import intcode.Memory
-import intcode.Parameter
+import intcode.params.Parameter
 
-data class EqualsInstruction(val pointer: Int, val param1: Parameter, val param2: Parameter, val param3: Parameter) : Instruction() {
+data class EqualsInstruction(val pointer: Int, val param1: Parameter, val param2: Parameter, val param3: Parameter) : Instruction {
 
     override fun nextInstructionPointer() = pointer + 4
 

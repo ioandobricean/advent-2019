@@ -1,5 +1,8 @@
 package intcode
 
+import intcode.instructions.AddInstruction
+import intcode.params.ImmediateParameter
+import intcode.params.PositionParameter
 import org.amshove.kluent.shouldEqual
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe

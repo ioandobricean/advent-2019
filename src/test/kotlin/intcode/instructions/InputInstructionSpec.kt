@@ -1,10 +1,12 @@
-package intcode
+package intcode.instructions
 
+import intcode.Memory
+import intcode.MockIO
 import org.amshove.kluent.shouldEqual
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
-object InstructionsSpec : Spek({
+object InputInstructionSpec : Spek({
     describe("An InputInstruction") {
         it("set input to memory address") {
             val inputCode = 1123
@@ -12,15 +14,6 @@ object InstructionsSpec : Spek({
             val inputInstruction = InputInstruction(0, MockIO(inputCode))
             inputInstruction.execute(memory)
             memory shouldEqual Memory("3,$inputCode,99")
-        }
-    }
-    describe("An OutputInstruction") {
-        it("set input to memory address") {
-            val memory = Memory("4,2,12345,99")
-            val mockIO = MockIO()
-            val outputInstruction = OutputInstruction(0, mockIO)
-            outputInstruction.execute(memory)
-            mockIO.writtenCode shouldEqual 12345
         }
     }
 })

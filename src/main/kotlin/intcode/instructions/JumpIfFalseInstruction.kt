@@ -1,10 +1,9 @@
 package intcode.instructions
 
-import intcode.Instruction
 import intcode.Memory
-import intcode.Parameter
+import intcode.params.Parameter
 
-data class JumpIfFalseInstruction(val pointer: Int, val param1: Parameter, val param2: Parameter) : Instruction() {
+data class JumpIfFalseInstruction(val pointer: Int, val param1: Parameter, val param2: Parameter) : Instruction {
     private var nextInstruction: Int = pointer + 3
 
     override fun nextInstructionPointer(): Int {
