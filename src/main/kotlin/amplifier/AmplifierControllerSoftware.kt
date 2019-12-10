@@ -1,7 +1,9 @@
 package amplifier
 
 import intcode.Memory
+import io.IOInterface
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 
@@ -13,58 +15,46 @@ class AmplifierControllerSoftware {
         val ampD = Amplifier("D", memory.clone())
         val ampE = Amplifier("E", memory.clone())
 
-        val channel1 = Channel<Int>()
-        val channel2 = Channel<Int>()
-        val channel3 = Channel<Int>()
-        val channel4 = Channel<Int>()
-        val channel5 = Channel<Int>()
+        val channelA = Channel<Int>()
+        val channelB = Channel<Int>()
+        val channelC = Channel<Int>()
+        val channelD = Channel<Int>()
+        val channelE = Channel<Int>()
         val channelOutput = Channel<Int>()
 
-        val job1 = GlobalScope.launch {
-            println("Start ${ampA.name}")
-            ampA.amplify(ChannelIO(channel1, channel2))
-            println("End ${ampA.name}")
-        }
-        val job2 = GlobalScope.launch {
-            println("Start ${ampB.name}")
-            ampB.amplify(ChannelIO(channel2, channel3))
-            println("End ${ampB.name}")
-        }
-        val job3 = GlobalScope.launch {
-            println("Start ${ampC.name}")
-            ampC.amplify(ChannelIO(channel3, channel4))
-            println("End ${ampC.name}")
-        }
-        val job4 = GlobalScope.launch {
-            println("Start ${ampD.name}")
-            ampD.amplify(ChannelIO(channel4, channel5))
-            println("End ${ampD.name}")
-        }
-        val job5 = GlobalScope.launch {
-            println("Start ${ampE.name}")
-            ampE.amplify(ChannelIO(channel5, channelOutput))
-            println("End ${ampE.name}")
-        }
+        val jobA = launchAmplifier(ampA, Channel3IO(channelA, channelB, channelOutput))
+        val jobB = launchAmplifier(ampB, ChannelIO(channelB, channelC))
+        val jobC = launchAmplifier(ampC, ChannelIO(channelC, channelD))
+        val jobD = launchAmplifier(ampD, ChannelIO(channelD, channelE))
+        val jobE = launchAmplifier(ampE, Channel3IO(channelE, channelA, channelOutput))
 
-        channel1.send(phaseSettings[0])
-        channel2.send(phaseSettings[1])
-        channel3.send(phaseSettings[2])
-        channel4.send(phaseSettings[3])
-        channel5.send(phaseSettings[4])
-        channel1.send(0) // initial value
+        // Send phaseSettings as first input param
+        channelA.send(phaseSettings[0])
+        channelB.send(phaseSettings[1])
+        channelC.send(phaseSettings[2])
+        channelD.send(phaseSettings[3])
+        channelE.send(phaseSettings[4])
+        channelA.send(0) // initial value
 
         var result = 0
         val jobOutput = GlobalScope.launch {
             result = channelOutput.receive()
         }
 
-        job1.join()
-        job2.join()
-        job3.join()
-        job4.join()
-        job5.join()
+        jobA.join()
+        jobB.join()
+        jobC.join()
+        jobD.join()
+        jobE.join()
         jobOutput.join()
 
         return result
     }
+
+    private fun launchAmplifier(amp: Amplifier, io: IOInterface): Job =
+            GlobalScope.launch {
+                println("Start ${amp.name}")
+                amp.amplify(io)
+                println("End ${amp.name}")
+            }
 }

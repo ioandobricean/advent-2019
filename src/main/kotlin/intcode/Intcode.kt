@@ -10,8 +10,10 @@ class Intcode(private val memory: Memory, private val io: IOInterface = ConsoleI
             val code = memory.getAddressValue(pointer)
             val opCode = OpCode(pointer, code, io)
             val instruction = opCode.getInstruction()
+            println("$parent >>> $instruction")
             instruction.execute(memory)
             pointer = instruction.nextInstructionPointer()
         } while (instruction.hasNextOperation(memory))
+        io.close()
     }
 }
