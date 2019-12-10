@@ -2,13 +2,13 @@ package intcode
 
 import io.IOInterface
 
-class MockIO(val inputCode: Int = 0) : IOInterface() {
+class MockIO(val inputCode: Int = 0) : IOInterface {
     var writtenCode = 0;
-    override fun readInt(): Int {
+    override suspend fun readInt(): Int {
         return inputCode
     }
 
-    override fun writeInt(code: Int) {
+    override suspend fun writeInt(code: Int) {
         writtenCode = code
     }
 }

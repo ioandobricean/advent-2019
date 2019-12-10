@@ -3,6 +3,7 @@ package intcode.instructions
 import intcode.Memory
 import intcode.MockIO
 import intcode.OpCode
+import kotlinx.coroutines.runBlocking
 import org.amshove.kluent.`should be`
 import org.amshove.kluent.shouldEqual
 import org.spekframework.spek2.Spek
@@ -14,7 +15,7 @@ object EqualsInstructionSpec : Spek({
             val memory = Memory("8,1,1,5,99,111")
             val opCode = OpCode(0, 8, MockIO())
             val instruction = opCode.getInstruction()
-            instruction.execute(memory)
+            runBlocking { instruction.execute(memory) }
             instruction.nextInstructionPointer() `should be` 4
             memory shouldEqual Memory("8,1,1,5,99,1")
         }
@@ -22,7 +23,7 @@ object EqualsInstructionSpec : Spek({
             val memory = Memory("11108,1,1,11,99")
             val opCode = OpCode(0, 11108, MockIO())
             val instruction = opCode.getInstruction()
-            instruction.execute(memory)
+            runBlocking { instruction.execute(memory) }
             instruction.nextInstructionPointer() `should be` 4
             memory shouldEqual Memory("11108,1,1,1,99")
         }

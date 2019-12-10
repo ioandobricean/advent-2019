@@ -3,8 +3,8 @@ package intcode
 import io.ConsoleInterface
 import io.IOInterface
 
-class Intcode(private val memory: Memory, private val io: IOInterface = ConsoleInterface()) {
-    fun execute() {
+class Intcode(private val memory: Memory, private val io: IOInterface = ConsoleInterface(), val parent: String = "") {
+    suspend fun execute() {
         var pointer = 0
         do {
             val code = memory.getAddressValue(pointer)

@@ -6,7 +6,7 @@ import intcode.params.PositionParameter
 
 data class MultiplyInstruction(val pointer: Int, val param1: Parameter, val param2: Parameter, val output: PositionParameter) : Instruction {
     override fun nextInstructionPointer(): Int = pointer + 4
-    override fun execute(memory: Memory) {
+    override suspend fun execute(memory: Memory) {
         if (!hasNextOperation(memory)) {
             println("Buffer Overflow")
             return

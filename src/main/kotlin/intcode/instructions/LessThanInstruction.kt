@@ -9,7 +9,7 @@ data class LessThanInstruction(val pointer: Int, val param1: Parameter, val para
         return pointer + 4
     }
 
-    override fun execute(memory: Memory) {
+    override suspend fun execute(memory: Memory) {
         val value1 = param1.getValue(memory)
         val value2 = param2.getValue(memory)
         val value = if (value1 < value2) 1 else 0

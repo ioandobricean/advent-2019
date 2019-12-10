@@ -1,6 +1,7 @@
 package intcode.instructions
 
 import intcode.*
+import kotlinx.coroutines.runBlocking
 import org.amshove.kluent.`should be`
 import org.amshove.kluent.shouldEqual
 import org.spekframework.spek2.Spek
@@ -12,7 +13,7 @@ object LessThanInstructionSpec : Spek({
             val memory = Memory("7,1,4,5,99,111")
             val opCode = OpCode(0, 7, MockIO())
             val instruction = opCode.getInstruction();
-            instruction.execute(memory)
+            runBlocking { instruction.execute(memory) }
             instruction.nextInstructionPointer() `should be` 4
             memory shouldEqual Memory("7,1,4,5,99,1")
         }
@@ -20,7 +21,7 @@ object LessThanInstructionSpec : Spek({
             val memory = Memory("7,5,5,5,99,111")
             val opCode = OpCode(0, 7, MockIO())
             val instruction = opCode.getInstruction();
-            instruction.execute(memory)
+            runBlocking { instruction.execute(memory) }
             instruction.nextInstructionPointer() `should be` 4
             memory shouldEqual Memory("7,5,5,5,99,0")
         }
@@ -28,7 +29,7 @@ object LessThanInstructionSpec : Spek({
             val memory = Memory("7,5,2,5,99,111")
             val opCode = OpCode(0, 7, MockIO())
             val instruction = opCode.getInstruction();
-            instruction.execute(memory)
+            runBlocking { instruction.execute(memory) }
             instruction.nextInstructionPointer() `should be` 4
             memory shouldEqual Memory("7,5,2,5,99,0")
         }
@@ -36,7 +37,7 @@ object LessThanInstructionSpec : Spek({
             val memory = Memory("11107,1,4,5,99")
             val opCode = OpCode(0, 11107, MockIO())
             val instruction = opCode.getInstruction();
-            instruction.execute(memory)
+            runBlocking { instruction.execute(memory) }
             instruction.nextInstructionPointer() `should be` 4
             memory shouldEqual Memory("11107,1,4,1,99")
         }
@@ -44,7 +45,7 @@ object LessThanInstructionSpec : Spek({
             val memory = Memory("11107,1,1,5,99")
             val opCode = OpCode(0, 11107, MockIO())
             val instruction = opCode.getInstruction();
-            instruction.execute(memory)
+            runBlocking { instruction.execute(memory) }
             instruction.nextInstructionPointer() `should be` 4
             memory shouldEqual Memory("11107,1,1,0,99")
         }
@@ -52,7 +53,7 @@ object LessThanInstructionSpec : Spek({
             val memory = Memory("11107,4,1,5,99")
             val opCode = OpCode(0, 11107, MockIO())
             val instruction = opCode.getInstruction();
-            instruction.execute(memory)
+            runBlocking { instruction.execute(memory) }
             instruction.nextInstructionPointer() `should be` 4
             memory shouldEqual Memory("11107,4,1,0,99")
         }

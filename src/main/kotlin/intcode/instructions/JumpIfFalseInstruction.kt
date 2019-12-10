@@ -10,7 +10,7 @@ data class JumpIfFalseInstruction(val pointer: Int, val param1: Parameter, val p
         return nextInstruction
     }
 
-    override fun execute(memory: Memory) {
+    override suspend fun execute(memory: Memory) {
         val value = param1.getValue(memory)
         if (value == 0) {
             nextInstruction = param2.getValue(memory)

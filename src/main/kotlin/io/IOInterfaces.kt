@@ -1,17 +1,17 @@
 package io
 
-abstract class IOInterface {
-    abstract fun readInt() : Int
-    abstract fun writeInt(code: Int)
+interface IOInterface {
+    suspend fun readInt(): Int
+    suspend fun writeInt(code: Int)
+    suspend fun close() {}
 }
 
-class ConsoleInterface: IOInterface() {
-    override fun readInt(): Int {
+class ConsoleInterface : IOInterface {
+    override suspend fun readInt(): Int {
         return Integer.valueOf(readLine()!!)
     }
 
-    override fun writeInt(code: Int) {
+    override suspend fun writeInt(code: Int) {
         println(code)
     }
-
 }
