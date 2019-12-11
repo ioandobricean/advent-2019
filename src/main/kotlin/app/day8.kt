@@ -16,4 +16,6 @@ fun main() {
     println("Count 1's = $count1")
     println("Count 2's = $count2")
     println("1's * 2's =  ${count1 * count2}")
+
+    println(image.decode())
 }

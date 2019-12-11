@@ -6,17 +6,24 @@ class ImageLayer {
     private val data: String
     private var memory: MutableMap<Int, IntArray> = mutableMapOf()
 
+    internal constructor(wide: Int, height: Int) {
+        this.wide = wide
+        this.height = height
+        (0 until height).forEach { memory[it] = IntArray(wide) { 0 } }
+        this.data = ""
+    }
+
     internal constructor(wide: Int, height: Int, data: String) {
         this.wide = wide
         this.height = height
         this.data = data
 
-        var index = 0
+        var indexHeight = 0
         var dataIndex = 0
         while (dataIndex < data.length) {
             val row = data.substring(dataIndex until (dataIndex + wide)).map { Integer.valueOf(it.toString()) }.toIntArray()
-            memory[index] = row
-            index++
+            memory[indexHeight] = row
+            indexHeight++
             dataIndex += wide
         }
     }
@@ -32,13 +39,21 @@ class ImageLayer {
         return row.filter { it == pixelValue }.count()
     }
 
+    fun setPixel(indexWide: Int, indexHeight: Int, decodePixel: Int) {
+        memory[indexHeight]?.set(indexWide, decodePixel)
+    }
+
+    fun getPixel(indexWide: Int, indexHeight: Int): Int? {
+        return memory[indexHeight]?.get(indexWide)
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is ImageLayer) return false
 
         if (wide != other.wide) return false
         if (height != other.height) return false
-        if (data != other.data) return false
+        if (toString() != other.toString()) return false
 
         return true
     }
@@ -46,11 +61,15 @@ class ImageLayer {
     override fun hashCode(): Int {
         var result = wide
         result = 31 * result + height
-        result = 31 * result + data.hashCode()
+        result = 31 * result + memoryString().hashCode()
         return result
     }
 
     override fun toString(): String {
-        return "ImageLayer(wide=$wide, height=$height, data='$data')"
+        return memoryString()
+    }
+
+    private fun memoryString(): String {
+        return (0 until height).fold("", { acc, i -> acc + "\n" + memory[i]!!.toList().map { Color.TRANSPARENT.fromCode(it) }.joinToString(separator = "") })
     }
 }
