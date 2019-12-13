@@ -1,12 +1,13 @@
 package amplifier
 
 import io.IOInterface
+import java.math.BigInteger
 
-class AmplifierIO(val input1: Int, val input2: Int) : IOInterface {
+class AmplifierIO(val input1: BigInteger, val input2: BigInteger) : IOInterface {
     private var count = 0
-    var output = 0
+    var output = BigInteger.ZERO
 
-    override suspend fun readInt(): Int {
+    override suspend fun readValue(): BigInteger {
         count++
         return when (count) {
             1 -> input1
@@ -15,7 +16,7 @@ class AmplifierIO(val input1: Int, val input2: Int) : IOInterface {
         }
     }
 
-    override suspend fun writeInt(code: Int) {
+    override suspend fun writeValue(code: BigInteger) {
         output = code
     }
 }

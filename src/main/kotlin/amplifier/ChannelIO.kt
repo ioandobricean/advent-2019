@@ -2,14 +2,15 @@ package amplifier
 
 import io.IOInterface
 import kotlinx.coroutines.channels.Channel
+import java.math.BigInteger
 
-class ChannelIO(private val input: Channel<Int>, private val output: Channel<Int>) : IOInterface {
+class ChannelIO(private val input: Channel<BigInteger>, private val output: Channel<BigInteger>) : IOInterface {
 
-    override suspend fun readInt(): Int {
+    override suspend fun readValue(): BigInteger {
         return input.receive()
     }
 
-    override suspend fun writeInt(code: Int) {
+    override suspend fun writeValue(code: BigInteger) {
         output.send(code)
     }
 

@@ -10,7 +10,7 @@ data class EqualsInstruction(val pointer: Int, val param1: Parameter, val param2
     override suspend fun execute(memory: Memory) {
         val value1 = param1.getValue(memory)
         val value2 = param2.getValue(memory)
-        val value = if (value1 == value2) 1 else 0
-        param3.setValue(value, memory)
+        val value = if (value1.compareTo(value2) == 0) 1 else 0
+        param3.setValue(value.toBigInteger(), memory)
     }
 }

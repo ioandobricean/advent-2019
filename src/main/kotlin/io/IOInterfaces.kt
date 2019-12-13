@@ -1,17 +1,19 @@
 package io
 
+import java.math.BigInteger
+
 interface IOInterface {
-    suspend fun readInt(): Int
-    suspend fun writeInt(code: Int)
+    suspend fun readValue(): BigInteger
+    suspend fun writeValue(code: BigInteger)
     suspend fun close() {}
 }
 
 class ConsoleInterface : IOInterface {
-    override suspend fun readInt(): Int {
-        return Integer.valueOf(readLine()!!)
+    override suspend fun readValue(): BigInteger {
+        return BigInteger(readLine()!!)
     }
 
-    override suspend fun writeInt(code: Int) {
+    override suspend fun writeValue(code: BigInteger) {
         println(code)
     }
 }

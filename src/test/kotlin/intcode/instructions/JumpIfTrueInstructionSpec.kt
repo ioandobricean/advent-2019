@@ -1,6 +1,8 @@
 package intcode.instructions
 
-import intcode.*
+import intcode.Memory
+import intcode.OpCode
+import io.MockIO
 import kotlinx.coroutines.runBlocking
 import org.amshove.kluent.shouldEqual
 import org.spekframework.spek2.Spek

@@ -1,8 +1,8 @@
 package intcode.instructions
 
 import intcode.Memory
-import intcode.MockIO
 import intcode.OpCode
+import io.MockIO
 import kotlinx.coroutines.runBlocking
 import org.amshove.kluent.`should be`
 import org.amshove.kluent.shouldEqual

@@ -13,6 +13,6 @@ data class LessThanInstruction(val pointer: Int, val param1: Parameter, val para
         val value1 = param1.getValue(memory)
         val value2 = param2.getValue(memory)
         val value = if (value1 < value2) 1 else 0
-        param3.setValue(value, memory)
+        param3.setValue(value.toBigInteger(), memory)
     }
 }

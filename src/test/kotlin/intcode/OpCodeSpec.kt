@@ -1,6 +1,7 @@
 package intcode
 
 import intcode.instructions.AddInstruction
+import io.MockIO
 import intcode.params.ImmediateParameter
 import intcode.params.PositionParameter
 import org.amshove.kluent.shouldEqual

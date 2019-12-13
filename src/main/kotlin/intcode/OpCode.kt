@@ -14,7 +14,7 @@ class OpCode(private val pointer: Int, private val code: Int, private val io: IO
             "01" -> AddInstruction(pointer, params[0], params[1], params[2] as PositionParameter)
             "02" -> MultiplyInstruction(pointer, params[0], params[1], params[2] as PositionParameter)
             "03" -> InputInstruction(pointer, io)
-            "04" -> OutputInstruction(pointer, io)
+            "04" -> OutputInstruction(pointer, params[0], io)
             "05" -> JumpIfTrueInstruction(pointer, params[0], params[1])
             "06" -> JumpIfFalseInstruction(pointer, params[0], params[1])
             "07" -> LessThanInstruction(pointer, params[0], params[1], params[2])

@@ -6,21 +6,22 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
+import java.math.BigInteger
 
 class AmplifierControllerSoftware {
-    suspend fun maxSignal(phaseSettings: List<Int>, memory: Memory): Int {
+    suspend fun maxSignal(phaseSettings: List<Int>, memory: Memory): BigInteger {
         val ampA = Amplifier("A", memory.clone())
         val ampB = Amplifier("B", memory.clone())
         val ampC = Amplifier("C", memory.clone())
         val ampD = Amplifier("D", memory.clone())
         val ampE = Amplifier("E", memory.clone())
 
-        val channelA = Channel<Int>()
-        val channelB = Channel<Int>()
-        val channelC = Channel<Int>()
-        val channelD = Channel<Int>()
-        val channelE = Channel<Int>()
-        val channelOutput = Channel<Int>()
+        val channelA = Channel<BigInteger>()
+        val channelB = Channel<BigInteger>()
+        val channelC = Channel<BigInteger>()
+        val channelD = Channel<BigInteger>()
+        val channelE = Channel<BigInteger>()
+        val channelOutput = Channel<BigInteger>()
 
         val jobA = launchAmplifier(ampA, Channel3IO(channelA, channelB, channelOutput))
         val jobB = launchAmplifier(ampB, ChannelIO(channelB, channelC))
@@ -29,14 +30,14 @@ class AmplifierControllerSoftware {
         val jobE = launchAmplifier(ampE, Channel3IO(channelE, channelA, channelOutput))
 
         // Send phaseSettings as first input param
-        channelA.send(phaseSettings[0])
-        channelB.send(phaseSettings[1])
-        channelC.send(phaseSettings[2])
-        channelD.send(phaseSettings[3])
-        channelE.send(phaseSettings[4])
-        channelA.send(0) // initial value
+        channelA.send(phaseSettings[0].toBigInteger())
+        channelB.send(phaseSettings[1].toBigInteger())
+        channelC.send(phaseSettings[2].toBigInteger())
+        channelD.send(phaseSettings[3].toBigInteger())
+        channelE.send(phaseSettings[4].toBigInteger())
+        channelA.send(0.toBigInteger()) // initial value
 
-        var result = 0
+        var result = BigInteger.ZERO
         val jobOutput = GlobalScope.launch {
             result = channelOutput.receive()
         }

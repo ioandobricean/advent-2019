@@ -8,7 +8,7 @@ class Intcode(private val memory: Memory, private val io: IOInterface = ConsoleI
         var pointer = 0
         do {
             val code = memory.getAddressValue(pointer)
-            val opCode = OpCode(pointer, code, io)
+            val opCode = OpCode(pointer, code.toInt(), io)
             val instruction = opCode.getInstruction()
             println("$parent >>> $instruction")
             instruction.execute(memory)
