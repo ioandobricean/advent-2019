@@ -2,9 +2,8 @@ package intcode.instructions
 
 import intcode.Memory
 import intcode.params.Parameter
-import intcode.params.PositionParameter
 
-data class AddInstruction(val pointer: Int, val param1: Parameter, val param2: Parameter, val output: PositionParameter) : Instruction {
+data class AddInstruction(val pointer: Int, val param1: Parameter, val param2: Parameter, val output: Parameter) : Instruction {
     override fun nextInstructionPointer(): Int = pointer + 4
 
     override suspend fun execute(memory: Memory) {

@@ -34,4 +34,15 @@ object IntcodeExamples : Spek({
             mockIO.lastWrittenCode shouldEqual BigInteger("1125899906842624")
         }
     }
+
+    describe("A Quine instruction set") {
+        it("should produce a copy of itself") {
+            val input = "109,1,204,-1,1001,100,1,100,1008,100,16,101,1006,101,0,99"
+            val memory = Memory(input)
+            val io = MockIO()
+            val intcode = Intcode(memory, io)
+            runBlocking { intcode.execute() }
+            io.writtenOutput() shouldEqual input
+        }
+    }
 })
